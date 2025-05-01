@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+}
+
 #Provider block (init every time it changes)
 provider "aws" {
     profile = "default"
