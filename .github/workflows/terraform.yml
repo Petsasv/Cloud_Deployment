@@ -45,4 +45,4 @@ jobs:
 
       # Terraform Output
       - name: Terraform Output
-        run: terraform output 
+        run: terraform output
