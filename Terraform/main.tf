@@ -36,7 +36,7 @@ resource "aws_instance" "Linux" {
 #Security Groups
 resource "aws_security_group" "sec_wind" {
   name = "launch-wizard-1"
-  description = "launch-wizard-1 created 2025-04-14T15:41:12.321Z"  #change to some like allow TCP only through our IPs
+  description = "Security Group allows only IPs of group members"  #launch-wizard-1 created 2025-04-14T15:41:12.321Z
   vpc_id      = "vpc-0490e9d4b8b258fde" 
 
   ingress     = [
