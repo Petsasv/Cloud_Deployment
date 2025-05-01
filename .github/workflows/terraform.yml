@@ -30,6 +30,7 @@ jobs:
       # Terraform Init
       - name: Terraform Init
         run: terraform init  # Initializes Terraform
+        working-directory: ./terraform  # Specify the directory containing Terraform files
 
       # Terraform Plan
       - name: Terraform Plan
