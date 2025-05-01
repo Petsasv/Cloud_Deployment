@@ -26,6 +26,7 @@ jobs:
       # Terraform Validate
       - name: Terraform Validate
         run: terraform validate  # Ensures the Terraform files are valid
+        working-directory: ./Terraform
 
       # Terraform Init
       - name: Terraform Init
@@ -35,10 +36,12 @@ jobs:
       # Terraform Plan
       - name: Terraform Plan
         run: terraform plan  # Previews changes before applying
+        working-directory: ./Terraform
 
       # Terraform Apply
       - name: Terraform Apply
         run: terraform apply -auto-approve  # Automatically applies changes
+        working-directory: ./Terraform
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
