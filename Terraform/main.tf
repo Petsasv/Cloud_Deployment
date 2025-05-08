@@ -1,149 +1,41 @@
-#Provider block (init every time it changes)
+terraform{
+    required_providers {
+      aws = {
+        source = "hashicorp/aws"
+      }
+    }
+}
+
 provider "aws" {
-    #profile = "default"  cause git creds
+    #profile = "default"
     region = "eu-north-1"
 }
 
-#Keypair
-resource "aws_key_pair" "my_key" {
-       key_name        = "windows_keypair"
-       public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYDXWE0gtIY6q9E/+dWCLgnnjhBw7KdOI3Dv8z8J3bX1NWaTjq/Nf+32y2RNsmpKbl5dgRIHa7iFU8Nz1jiIY3TpzEWFMxitbIvQMBd/spyRvWtY98omE0k83M4W7a2P4jHnA5t7ZUeVs7PcsH4b6/M/B2vIhpZ2FNkdLeG/Q3c4XgenOGfu4mlLGeiFr3ekRKZv/qigvxINnj7HeBumo424zWhVfgFyDsuKpoioZ3mxMboTXN9ZWqbTcu0wJ0GXCRyKdLC/Vr3XRdjHrdfVXk+K4Tc1llLOvNi4Sri8RVf2/yv/HYtjkA7NA5iMzgDdOiTG86DncKUYF+alLapchD"       
-
+resource "aws_key_pair" "main_key" {
+  key_name   = "access-key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDM0a08XcI6zKbE/gqHbCHdTVErkMHjLkwb9zvcbaJjGl1qjpm1yP7P+Tq4Vpgk6duvNRd+qd5weEegf4BpqdfTtlKHkPIUlPilO7EBmXkFokADvixqxUGwMcn9NVh9cXfmUzh14A+1C7Zuw7RZFSEN6o/tVLPo8n5MhJpeJxJuV9ZHUMkYlx2VuK57vL2XhgNpz+2cJvmQBEIRlBG4V9EGZ0V2sCgJLKMOM0ZqBahaE2S3rwUkGO2eCUaxhHZ548wEQkzICFC3GNxC9cPYTWAHsk1VnKUvoKFI7J1Gxt8fKAxd3RoXfhUE7NYKwg4yh++6/cXUiVINKjYL+9Z5stWZ"
 }
-#Resource Blocks
-#WINDOWS EC2
-resource "aws_instance" "Windows" {
+
+
+resource "aws_instance" "Windows_Gateway" {
   ami = "ami-0d188df7cedce7d90"
   instance_type = "t3.micro"
   subnet_id  = "subnet-0523303f286361516"
-  vpc_security_group_ids = ["sg-05fcf6e902f1c54c8",]
-  key_name = "windows_keypair"
-  associate_public_ip_address = false
+  key_name = "access-key"
 
   tags = {
-        "Name" = "Windows"
+        "Name" = "Windows Server to act as gateway"
     }
 }
 
-#LINUX EC2
-resource "aws_instance" "Linux" {
+resource "aws_instance" "Linux_Host" {
   ami = "ami-08f78cb3cc8a4578e"
   instance_type = "t3.micro"
   subnet_id  = "subnet-0523303f286361516"
-  vpc_security_group_ids = ["sg-0e76b679bb2ce9ad1",]
-  key_name = "windows_keypair"
-  associate_public_ip_address = false
+  key_name = "access-key" 
 
   tags = {
-        "Name" = "Linux"
+        "Name" = "Linux server that hosts website"
     }
 }
-
-#Security Groups
-resource "aws_security_group" "sec_wind" {
-  name = "launch-wizard-1"
-  description = "launch-wizard-1 created 2025-04-14T15:41:12.321Z - TCP from IPs only"  #change to some like allow TCP only through our IPs
-  vpc_id      = "vpc-0490e9d4b8b258fde" 
-
-  ingress     = [
-        {
-            cidr_blocks      = [
-                "79.103.153.5/32",
-            ]
-            description      = "Pepe IP"
-            from_port        = 3389
-            ipv6_cidr_blocks = []
-            prefix_list_ids  = []
-            protocol         = "tcp"
-            security_groups  = []
-            self             = false
-            to_port          = 3389
-        },
-        {
-            cidr_blocks      = [
-                "79.107.174.132/32",
-                "45.139.214.155/32",
-            ]
-            description      = null
-            from_port        = 3389
-            ipv6_cidr_blocks = []
-            prefix_list_ids  = []
-            protocol         = "tcp"
-            security_groups  = []
-            self             = false
-            to_port          = 3389
-        },
-    ]
-
-    egress      = [
-        {
-            cidr_blocks      = [
-                "0.0.0.0/0",
-            ]
-            description      = null
-            from_port        = 0
-            ipv6_cidr_blocks = []
-            prefix_list_ids  = []
-            protocol         = "-1"
-            security_groups  = []
-            self             = false
-            to_port          = 0
-        },
-    ]
-}
-
-
-resource "aws_security_group" "linux_sec" {
-    name        = "launch-wizard-2"
-    description = "launch-wizard-2 created 2025-04-22T13:42:16.572Z - TCP and SSH"
-    vpc_id      = "vpc-0490e9d4b8b258fde"
-
-    egress      = [
-        {
-            cidr_blocks      = [
-                "0.0.0.0/0",
-            ]
-            description      = null
-            from_port        = 0
-            ipv6_cidr_blocks = []
-            prefix_list_ids  = []
-            protocol         = "-1"
-            security_groups  = []
-            self             = false
-            to_port          = 0
-        },
-    ]
-    ingress     = [
-        {
-            cidr_blocks      = [
-                "172.31.40.127/32",
-            ]
-            description      = null
-            from_port        = 80
-            ipv6_cidr_blocks = []
-            prefix_list_ids  = []
-            protocol         = "tcp"
-            security_groups  = []
-            self             = false
-            to_port          = 80
-        },
-        {
-            cidr_blocks      = [
-                "79.103.153.5/32",
-                "79.107.174.132/32",
-                "45.139.214.155/32",
-                "46.103.91.241/32",
-            ]
-            description      = null
-            from_port        = 22
-            ipv6_cidr_blocks = []
-            prefix_list_ids  = []
-            protocol         = "tcp"
-            security_groups  = []
-            self             = false
-            to_port          = 22
-        },
-    ]  
-}
-
 

@@ -1,6 +1,7 @@
 # Terraform files and folders
 .terraform/
 .terraform.lock.hcl
+.terraform.lock.hcl.info
 terraform.tfvars
 crash.log
 
