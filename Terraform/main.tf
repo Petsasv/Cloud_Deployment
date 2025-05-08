@@ -6,6 +6,13 @@ terraform {
   }
 }
 
+resource "aws_key_pair" "my_key" {
+  key_name = "my-key"
+  public_key = null
+
+}
+
+
 #Provider block (init every time it changes)
 provider "aws" {
     profile = "default"
