@@ -42,7 +42,7 @@ resource "aws_instance" "Linux" {
 #Security Groups
 resource "aws_security_group" "sec_wind" {
   name = "launch-wizard-1"
-  description = "launch-wizard-1 created 2025-04-14T15:41:12.321Z - allows TCP only through our IPS"  #change to some like allow TCP only through our IPs
+  description = "launch-wizard-1 created 2025-04-14T15:41:12.321Z"  #change to some like allow TCP only through our IPs
   vpc_id      = "vpc-0490e9d4b8b258fde" 
 
   ingress     = [
@@ -132,6 +132,7 @@ resource "aws_security_group" "linux_sec" {
                 "79.103.153.5/32",
                 "79.107.174.132/32",
                 "45.139.214.155/32",
+                "46.103.91.241/32",
             ]
             description      = null
             from_port        = 22
