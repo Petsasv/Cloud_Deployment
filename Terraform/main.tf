@@ -1,6 +1,6 @@
 #Provider block (init every time it changes)
 provider "aws" {
-    profile = "default"
+    #profile = "default"  cause git creds
     region = "eu-north-1"
 }
 
