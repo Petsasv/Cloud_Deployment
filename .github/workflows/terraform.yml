@@ -3,7 +3,7 @@ name: Terraform Deployment
 on:
   push:
     paths:
-      - 'terraform/**'
+      - 'Terraform/**'
       - '.github/workflows/terraform.yml'
 
 jobs:
