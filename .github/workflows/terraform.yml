@@ -2,11 +2,9 @@ name: Terraform Deployment
 
 on:
   push:
-    branches:
-      - main  # Trigger on pushes to the main branch
-  pull_request:
-    branches:
-      - main  # Trigger on pull requests to the main branch
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform.yml'
 
 jobs:
   terraform:
