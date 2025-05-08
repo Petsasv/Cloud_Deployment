@@ -95,7 +95,7 @@ resource "aws_security_group" "sec_wind" {
 
 resource "aws_security_group" "linux_sec" {
     name        = "launch-wizard-2"
-    description = "launch-wizard-2 created 2025-04-22T13:42:16.572Z"
+    description = "launch-wizard-2 created 2025-04-22T13:42:16.572Z - TCP and SSH"
     vpc_id      = "vpc-0490e9d4b8b258fde"
 
     egress      = [
