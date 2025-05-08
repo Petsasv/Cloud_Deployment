@@ -1,24 +1,15 @@
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-    }
-  }
-}
-
-resource "aws_key_pair" "my_key" {
-  key_name = "my-key"
-  public_key = null
-
-}
-
-
 #Provider block (init every time it changes)
 provider "aws" {
     profile = "default"
     region = "eu-north-1"
 }
 
+#Keypair
+resource "aws_key_pair" "my_key" {
+       key_name        = "windows_keypair"
+       public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYDXWE0gtIY6q9E/+dWCLgnnjhBw7KdOI3Dv8z8J3bX1NWaTjq/Nf+32y2RNsmpKbl5dgRIHa7iFU8Nz1jiIY3TpzEWFMxitbIvQMBd/spyRvWtY98omE0k83M4W7a2P4jHnA5t7ZUeVs7PcsH4b6/M/B2vIhpZ2FNkdLeG/Q3c4XgenOGfu4mlLGeiFr3ekRKZv/qigvxINnj7HeBumo424zWhVfgFyDsuKpoioZ3mxMboTXN9ZWqbTcu0wJ0GXCRyKdLC/Vr3XRdjHrdfVXk+K4Tc1llLOvNi4Sri8RVf2/yv/HYtjkA7NA5iMzgDdOiTG86DncKUYF+alLapchD"       
+
+}
 #Resource Blocks
 #WINDOWS EC2
 resource "aws_instance" "Windows" {
@@ -51,7 +42,7 @@ resource "aws_instance" "Linux" {
 #Security Groups
 resource "aws_security_group" "sec_wind" {
   name = "launch-wizard-1"
-  description = "Security Group allows only IPs of group members"  #launch-wizard-1 created 2025-04-14T15:41:12.321Z
+  description = "launch-wizard-1 created 2025-04-14T15:41:12.321Z"  #change to some like allow TCP only through our IPs
   vpc_id      = "vpc-0490e9d4b8b258fde" 
 
   ingress     = [
