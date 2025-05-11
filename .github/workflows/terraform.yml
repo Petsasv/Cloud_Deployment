@@ -3,8 +3,9 @@ name: Terraform Deployment
 on:
   push:
     paths:
-      - 'Terraform/**'
-      - '.github/workflows/terraform.yml'
+     # - 'Terraform/**'
+     # - '.github/workflows/terraform.yml'
+     - 'terra/**' #fake path juat need it disabled for now
 
 jobs:
   terraform:
