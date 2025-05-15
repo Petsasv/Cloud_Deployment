@@ -1,0 +1,417 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Courier New", Courier, monospace;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 100px;
+  /*   background: red; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 99;
+}
+
+.logo {
+  font-size: 2em;
+  color: black;
+  user-select: none;
+}
+
+.navigation a {
+  position: relative;
+  font-size: 1.1em;
+  color: black;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 40px;
+}
+
+/* the white lines under the about and contact. */
+.navigation a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 3px;
+  background: black;
+  border-radius: 5px;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform 0.5s;
+}
+
+.navigation a:hover::after {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+/*  CSS The up line and btn */
+
+.navigation .btnLogin-popup {
+  width: 130px;
+  height: 50px;
+  background: transparent;
+  border: 2px solid black;
+  outline: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1em;
+  color: black;
+  font-weight: 500;
+  margin-left: 40px;
+}
+
+/* the white part when the cursor goes up to the btn */
+.navigation .btnLogin-popup:hover {
+  background: grey;
+  color: black;
+}
+
+/* the box. inside the login info */
+.wrapper {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transform: scale(0);
+  transition: transform 0.5s ease, height 0.2s ease;
+}
+
+.wrapper.active-popup {
+  transform: scale(1);
+}
+
+.wrapper.show-register {
+  height: 700px;
+}
+.wrapper.active {
+  height: 450px;
+}
+
+/* the register */
+.wrapper .form-box {
+  width: 100%;
+  padding: 40px;
+}
+
+.wrapper .form-box.login {
+  transition: transform 0.18s ease;
+  transform: translateX(0);
+}
+
+.wrapper.active .form-box.login {
+  transition: none;
+  transform: translateX(-400px);
+}
+
+.wrapper .form-box.register {
+  position: absolute;
+  transition: none;
+  transform: translateX(400px);
+}
+
+.wrapper.active .form-box.register {
+  transition: transform 0.18s ease;
+  transform: translateX(0);
+}
+
+/* the x icon inside the box */
+.wrapper .icon-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45px;
+  height: 45px;
+  background: #162938;
+  font-size: 2em;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom-left-radius: 20px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.form-box h2 {
+  font-size: 2em;
+  color: #162938;
+  /* the login inside the box color */
+  text-align: center;
+}
+
+/* grammes sto login box ekei sto email & password */
+.input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  border-bottom: 2px solid #162938;
+  margin: 30px 0;
+}
+
+.input-box label {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+  font-size: 1em;
+  color: #162938;
+  font-weight: 500;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+/* when you click in the email the email goes up  / the same with the pass*/
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+  top: -5px;
+}
+
+/* transpaert the box of email & pass */
+.input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  color: #162938;
+  font-weight: 600;
+  padding: 0 35px 0 5px;
+}
+
+/* ta icon apo ta deksia */
+.input-box .icon {
+  position: absolute;
+  right: 8px;
+  font-size: 1.2em;
+  color: #162938;
+  line-height: 57px;
+}
+
+/* the remember me style */
+.remember-forgot {
+  font-size: 0.9em;
+  color: #162938;
+  font-weight: 500;
+  margin: -15px 0 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* to tik sto checkbox xroma klp */
+.remember-forgot label input {
+  accent-color: #162938;
+  margin-right: 3px;
+}
+
+.remember-forgot a {
+  color: #162938;
+  text-decoration: none;
+}
+
+.remember-forgot a:hover {
+  text-decoration: underline;
+}
+
+/* the btn inside the login box */
+.btn {
+  width: 100%;
+  height: 45px;
+  background: #162938;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* space between the btn and the register */
+.login-register {
+  font-size: 0.9em;
+  color: #162938;
+  text-align: center;
+  font-weight: 500;
+  margin: 25px 0 10px;
+}
+
+/* change the color/style of register under the btn */
+.login-register p a {
+  color: #162938;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-register p a:hover {
+  text-decoration: underline;
+}
+
+/* end of login & register */
+
+.wrap-contact {
+  position: absolute;
+  width: 530px;
+  height: 400px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  backdrop-filter: blur(45px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#container {
+  margin: auto;
+  margin-right: 30px;
+  margin-top: 9%;
+  width: 200px;
+  height: auto;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.2);
+  transition: 1s;
+}
+
+#container .navbar {
+  /* border-left: 50px; */
+  width: 90%;
+  height: auto;
+  /* margin: 10px 15px; */
+  align-items: left;
+  justify-content: left;
+}
+
+#container.active .navbar ul {
+  /* display: flex; */
+  width: 90%;
+  /* align-items: left;
+	justify-content: left; */
+}
+
+#container .navbar ul {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  /* align-items: flex-start;
+	justify-content: right;*/
+}
+
+#container .navbar ul li {
+  display: flex;
+  margin: auto;
+  height: 20px;
+  width: 100%;
+  margin: 5px 15px;
+  border-radius: 7px;
+}
+
+#container .navbar ul li a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  border-radius: 7px;
+}
+
+#container .navbar ul li a span {
+  display: flex;
+  color: #191919;
+  font-size: 15px;
+  border-radius: 7px;
+}
+
+#container .navbar ul li a ion-icon {
+  display: flex;
+  font-size: 20px;
+  margin: 0 10px;
+  color: #191919;
+}
+
+#container .navbar ul li a:hover,
+#container .navbar ul li a:hover span,
+#container .navbar ul li a:hover ion-icon {
+  font-weight: bold;
+  color: lightblue;
+  /*background: #f1f1f1; */
+}
+
+#container .user {
+  display: flex;
+  width: 100%;
+  height: 70px;
+  background: #f1f1f1;
+  align-items: right;
+  justify-content: right;
+}
+
+#container.active .user {
+  width: 80%;
+  height: 100%;
+  margin: 10% 0;
+  border-radius: 10px;
+}
+
+#container .user img {
+  display: flex;
+  width: 50px;
+  height: 50px;
+  margin: 10px 0;
+  margin-left: 10px;
+  border-radius: 5px;
+}
+
+#container .user .name {
+  display: flex;
+  flex-direction: column;
+  width: 90px;
+  height: 60%;
+  padding: 5px;
+  margin: 0 10px;
+}
+
+#container .user .name h5 {
+  display: flex;
+  font-size: 12px;
+}
+
+#container .user .name span {
+  display: flex;
+  font-size: 10px;
+}
+
+#container .user a {
+  display: flex;
+  height: 40px;
+  width: 40px;
+  align-items: right;
+  justify-content: right;
+  border-radius: 7px;
+}
