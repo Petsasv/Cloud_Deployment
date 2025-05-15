@@ -89,7 +89,7 @@ resource "aws_security_group" "windows_sec" {
 
 resource "aws_security_group" "linux_sec" {
     name        = "linux-security"
-    description = "Allow HTTP (from windows machine only) and SSH traffic (from our IPs only)"
+    description = "Allow HTTP (from windows machine only) and SSH traffic (from our IP only)"
 
       egress {
         from_port   = 0
