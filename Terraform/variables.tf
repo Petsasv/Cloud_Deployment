@@ -9,7 +9,7 @@ variable "ssh_allowed_ips" {
 }
 
 variable "windows_ip"{
-    default = ["172.31.47.63/32"]
+    default = ["172.31.47.63/32"]   # "0.0.0.0/0"
 
     description = "Windows IP allowed to HTTP into website"
 }
