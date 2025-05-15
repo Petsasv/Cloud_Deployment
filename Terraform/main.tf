@@ -53,7 +53,7 @@ resource "aws_instance" "Linux_Host" {
   vpc_security_group_ids = [aws_security_group.linux_sec.id]
 
   tags = {
-        "Name" = "Linux server that hosts the website"
+        "Name" = "Linux server hosts the website"
     }
 }
 
