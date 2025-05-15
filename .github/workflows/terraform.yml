@@ -3,8 +3,7 @@ name: Terraform Deployment
 on:
   push:
     paths:
-     # - 'Terraform/**'
-     - 's'
+     - './Terraform/**'
 
 jobs:
   terraform:
