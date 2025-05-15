@@ -53,7 +53,7 @@ resource "aws_instance" "Linux_Host" {
   vpc_security_group_ids = [aws_security_group.linux_sec.id]
 
   tags = {
-        "Name" = "Linux server that hosts website"
+        "Name" = "Linux server that hosts the website"
     }
 }
 
@@ -67,7 +67,6 @@ resource "aws_security_group" "windows_sec" {
                 "79.103.26.106/32",
                 "45.139.214.104/32",
                 "141.255.126.50/32",
-                "78.103.26.106/32",
             ]
             from_port   = 3389
             to_port     = 3389
