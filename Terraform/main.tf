@@ -113,7 +113,7 @@ resource "aws_security_group" "linux_sec" {
             self             = false
         },
         {
-            cidr_blocks      = [     #Our IPs 
+            cidr_blocks      = [    
                 "79.103.26.106/32",
                 "45.139.214.104/32",
                 "141.255.126.50/32",
