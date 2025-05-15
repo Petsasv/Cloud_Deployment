@@ -31,6 +31,10 @@ lifecycle {
   }
 }
 
+#reference to default vpc
+data "aws_vpc" "default" {
+  default = true
+}
 
 
 resource "aws_instance" "Windows_Gateway" {
@@ -57,75 +61,79 @@ resource "aws_instance" "Linux_Host" {
     }
 }
 
+#WINDOWS SECURITY GROUP
 resource "aws_security_group" "windows_sec" {
   name = "windows-security"
-  description = "Allow RDP traffic"  
+  description = "Allow RDP traffic" 
+  vpc_id      = data.aws_vpc.default.id
 
-
-  ingress  {    
-            cidr_blocks      = [
-                "79.103.26.106/32",
-                "45.139.214.104/32",
-                "141.255.126.50/32",
-            ]
-            from_port   = 3389
-            to_port     = 3389
-            protocol    = "tcp"
-            description      = "Users Ips"
-            ipv6_cidr_blocks = []
-            prefix_list_ids  = []
-            security_groups  = []
-            self             = false
-        }
-    
-
-      egress {
-          from_port   = 0
-          to_port     = 0
-          protocol    = "-1"
-          cidr_blocks = ["0.0.0.0/0"]
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
-resource "aws_security_group" "linux_sec" {
-    name        = "linux-security"
-    description = "Allow HTTP (from windows machine only) and SSH traffic (from our IPs only)"
-
-      egress {
-        from_port   = 0
-        to_port     = 0
-        protocol    = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-      }
-
-    ingress     = [
-        {
-            cidr_blocks      = [
-                "172.31.40.127/32",  #Windows IP
-            ]
-            from_port   = 80
-            to_port     = 80
-            protocol    = "tcp"
-            description      = "Windows VM IP"
-            ipv6_cidr_blocks = []
-            prefix_list_ids  = []
-            security_groups  = []
-            self             = false
-        },
-        {
-            cidr_blocks      = [    
-                "79.103.26.106/32",
-                "45.139.214.104/32",
-                "141.255.126.50/32",
-            ]
-            from_port   = 22
-            to_port     = 22
-            protocol    = "tcp"
-            description      = "Users IPs"
-            ipv6_cidr_blocks = []
-            prefix_list_ids  = []
-            security_groups  = []
-            self             = false
-        }
-    ]  
+resource "aws_security_group_rule" "ssh_windows" {
+  type              = "ingress"
+  cidr_blocks  = var.ssh_allowed_ips
+  from_port   = 3389
+  to_port     = 3389
+  protocol    = "tcp"
+  description      = "Users IPs"
+  security_group_id = aws_security_group.windows_sec.id
 }
+
+
+resource "aws_security_group_rule" "egress_windows" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.windows_sec.id
+}
+
+#LINUX SECURITY GROUP
+resource "aws_security_group" "linux_sec" {
+  name        = "linux-security"
+  description = "Allow HTTP (from windows machine only) and SSH traffic (from our IPs only)"
+  vpc_id      = data.aws_vpc.default.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+
+resource "aws_security_group_rule" "ssh_linux" {
+  type              = "ingress"
+  cidr_blocks  = var.ssh_allowed_ips
+  from_port   = 22
+  to_port     = 22
+  protocol    = "tcp"
+  description      = "Users IPs"
+  security_group_id = aws_security_group.linux_sec.id
+}
+
+resource "aws_security_group_rule" "http_linux" {
+  type              = "ingress"
+  cidr_blocks  = var.windows_ip
+  from_port   = 80
+  to_port     = 80
+  protocol    = "tcp"
+  description      = "Windows VM IP"
+  security_group_id = aws_security_group.linux_sec.id
+}
+
+
+resource "aws_security_group_rule" "egress_linux" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.linux_sec.id
+}
+
+
+
+
