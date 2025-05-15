@@ -41,7 +41,7 @@ jobs:
 
       # Terraform Apply
       - name: Terraform Apply
-        run: terraform apply -input=false -auto-approve tfplan
+        run: terraform apply -input=false -auto-approve
         
       # Terraform Output
       - name: Terraform Output
