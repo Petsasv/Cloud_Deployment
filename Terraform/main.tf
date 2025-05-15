@@ -59,7 +59,7 @@ resource "aws_instance" "Linux_Host" {
 
 resource "aws_security_group" "windows_sec" {
   name = "windows-security"
-  description = "Allow RDP traffic"  
+  description = "Allow RDP traffic "  
 
 
   ingress  {    
@@ -89,7 +89,7 @@ resource "aws_security_group" "windows_sec" {
 
 resource "aws_security_group" "linux_sec" {
     name        = "linux-security"
-    description = "Allow HTTP (from windows machine only) and SSH traffic (from our IP only)"
+    description = "Allow HTTP (from windows machine only) and SSH traffic (from our IPs only)"
 
       egress {
         from_port   = 0
