@@ -1,77 +1,72 @@
 const express = require("express");
-const MongoClient = require("mongodb").MongoClient;
+const { MongoClient } = require("mongodb");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 
 const app = express();
-
-app.use(express.static(__dirname)); //css to work
-app.use(cors());
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
-
 const PORT = 3000;
 const DB = "devops";
-var URL = `mongodb://127.0.0.1:27017`;
-const client = new MongoClient(URL);
+const URL = "mongodb://127.0.0.1:27017";
 
-app.post("/register", async (req, res) => {
-  const { username } = req.body;
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-  try {
-    const result = await client.connect();
-
-    const foundUser = await result
-      .db(DB)
-      .collection("user")
-      .findOne({ username });
-
-    if (foundUser) {
-      res
-        .status(500)
-        .json({ error: `User with username ${username} already exists` });
-
-      return;
-    }
-
-    await result.db(DB).collection("user").insertOne(req.body);
-
-    result.close();
-    res.status(200).json({ success: true });
-  } catch (err) {
-    throw err;
-  }
-});
-
-app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const result = await client.connect();
-
-    const foundUser = await result.db(DB).collection("user").findOne({ email });
-
-    if (foundUser && foundUser.password !== password) {
-      res.status(500).json({ error: "Passwords do not match" });
-      return;
-    }
-
-    result.close();
-    res.status(200).json({ success: true });
-  } catch (err) {
-    throw err;
-  }
-});
+// Serve static files
+app.use(express.static(__dirname));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "firstPage.html"));
 });
 
+app.post("/register", async (req, res) => {
+  const { name, username, email, password } = req.body;
+  const client = new MongoClient(URL);
+
+  try {
+    await client.connect();
+    const db = client.db(DB);
+    const existingUser = await db.collection("user").findOne({ username });
+
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ error: `Username "${username}" already exists.` });
+    }
+
+    await db.collection("user").insertOne({ name, username, email, password });
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    await client.close();
+  }
+});
+
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  const client = new MongoClient(URL);
+
+  try {
+    await client.connect();
+    const db = client.db(DB);
+    const user = await db.collection("user").findOne({ email });
+
+    if (!user || user.password !== password) {
+      return res.status(401).json({ error: "Invalid email or password" });
+    }
+
+    res.status(200).json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    await client.close();
+  }
+});
+
 app.listen(PORT, () => {
-  console.log("Server listening on port ", PORT);
+  console.log("Server listening on port", PORT);
 });

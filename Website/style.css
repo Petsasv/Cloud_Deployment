@@ -415,3 +415,20 @@ header {
   justify-content: right;
   border-radius: 7px;
 }
+
+/* Toggle form visibility */
+.wrapper .form-box.login {
+  display: block;
+}
+
+.wrapper.active .form-box.login {
+  display: none;
+}
+
+.wrapper .form-box.register {
+  display: none;
+}
+
+.wrapper.active .form-box.register {
+  display: block;
+}

@@ -22,10 +22,10 @@
     <div class="wrapper">
       <span class="icon-close"><ion-icon name="close-outline"></ion-icon></span>
 
-      <!-- Login frame -->
+      <!-- Login Form -->
       <div class="form-box login">
         <h2>Login</h2>
-        <form method="POST" onsubmit="userLogin(event)">
+        <form onsubmit="userLogin(event)">
           <div class="input-box">
             <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
             <input type="email" id="email" name="email" required />
@@ -41,46 +41,41 @@
           <button type="submit" class="btn">Login</button>
           <div class="login-register">
             <p>
-              Don't have an account ?
-              <a href="#" class="register-link"> Register</a>
+              Don't have an account?
+              <a href="#" class="register-link">Register</a>
             </p>
           </div>
         </form>
       </div>
 
-      <!-- Registration frame -->
+      <!-- Registration Form -->
       <div class="form-box register">
         <h2>Registration</h2>
-        <form method="POST" onsubmit="userRegister(event)">
+        <form onsubmit="userRegister(event)">
           <div class="input-box">
             <span class="icon"
               ><ion-icon name="person-outline"></ion-icon
             ></span>
-            <input type="text" id="name" name="name" required /><br />
+            <input type="text" id="name" name="name" required />
             <label>Name</label>
           </div>
           <div class="input-box">
             <span class="icon"
               ><ion-icon name="person-outline"></ion-icon
             ></span>
-            <input type="text" id="username" name="username" required /><br />
+            <input type="text" id="username" name="username" required />
             <label>Username</label>
           </div>
           <div class="input-box">
             <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
-            <input type="text" id="email" name="email" required /><br />
+            <input type="email" id="reg_email" name="email" required />
             <label>Email</label>
           </div>
           <div class="input-box">
             <span class="icon"
               ><ion-icon name="lock-closed-outline"></ion-icon
             ></span>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              required
-            /><br />
+            <input type="password" id="reg_password" name="password" required />
             <label>Password</label>
           </div>
           <button type="submit" class="btn">Register</button>
@@ -88,7 +83,6 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
     <script
       type="module"
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
@@ -97,12 +91,70 @@
       nomodule
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
+
     <script>
+      // Switch between login/register forms
       window.addEventListener("DOMContentLoaded", () => {
         const wrapper = document.querySelector(".wrapper");
+        const registerLink = document.querySelector(".register-link");
+        const iconClose = document.querySelector(".icon-close");
+
         wrapper.classList.add("active-popup");
-        wrapper.classList.remove("active");
+
+        registerLink.addEventListener("click", () => {
+          wrapper.classList.add("active");
+        });
+
+        iconClose.addEventListener("click", () => {
+          wrapper.classList.remove("active-popup");
+        });
       });
+
+      // Register handler
+      async function userRegister(e) {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const username = document.getElementById("username").value;
+        const email = document.getElementById("reg_email").value;
+        const password = document.getElementById("reg_password").value;
+
+        const response = await fetch("/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, username, email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Registration successful!");
+          window.location.href = "welcome.html"; // Redirect to welcome.html
+        } else {
+          alert("Registration failed: " + data.error);
+        }
+      }
+
+      // Login handler
+      async function userLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        const response = await fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert("Login successful!");
+          window.location.href = "welcome.html"; // Redirect to welcome.html
+        } else {
+          alert("Login failed: " + data.error);
+        }
+      }
     </script>
   </body>
 </html>
