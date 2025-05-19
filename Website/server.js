@@ -2,9 +2,11 @@ const express = require("express");
 const MongoClient = require("mongodb").MongoClient;
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
+app.use(express.static(__dirname)); //css to work
 app.use(cors());
 app.use(bodyParser.json());
 app.use(
@@ -64,6 +66,10 @@ app.post("/login", async (req, res) => {
   } catch (err) {
     throw err;
   }
+});
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "firstPage.html"));
 });
 
 app.listen(PORT, () => {
