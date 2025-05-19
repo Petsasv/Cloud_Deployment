@@ -124,6 +124,16 @@ resource "aws_security_group_rule" "http_linux" {
   security_group_id = aws_security_group.linux_sec.id
 }
 
+resource "aws_security_group_rule" "port3000_linux" {
+  type              = "ingress"
+  cidr_blocks  = var.windows_ip
+  from_port   = 3000
+  to_port     = 3000
+  protocol    = "tcp"
+  description      = "Windows VM IP for port of the website"
+  security_group_id = aws_security_group.linux_sec.id
+}
+
 
 resource "aws_security_group_rule" "egress_linux" {
   type              = "egress"
