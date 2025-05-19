@@ -116,7 +116,7 @@ resource "aws_security_group_rule" "ssh_linux" {
 
 resource "aws_security_group_rule" "http_linux" {
   type              = "ingress"
-  cidr_blocks  = var.windows_ip
+  cidr_blocks  = var.windows_ip  #concat(var.windows_ip, var.ssh_allowed_ips)
   from_port   = 80
   to_port     = 80
   protocol    = "tcp"
@@ -126,7 +126,7 @@ resource "aws_security_group_rule" "http_linux" {
 
 resource "aws_security_group_rule" "port3000_linux" {
   type              = "ingress"
-  cidr_blocks  = var.windows_ip  #var.windows_ip   var.ssh_allowed_ips 
+  cidr_blocks  = concat(var.windows_ip, var.ssh_allowed_ips) 
   from_port   = 3000
   to_port     = 3000
   protocol    = "tcp"
