@@ -56,6 +56,8 @@ resource "aws_instance" "Linux_Host" {
   key_name = "access_key" 
   vpc_security_group_ids = [aws_security_group.linux_sec.id]
 
+  //user_data = file("init_linux.sh")
+
   tags = {
         "Name" = "Linux server hosts the website"
     }
@@ -114,7 +116,7 @@ resource "aws_security_group_rule" "ssh_linux" {
   security_group_id = aws_security_group.linux_sec.id
 }
 
-resource "aws_security_group_rule" "http_linux" {
+resource "aws_security_group_rule" "http_linux" {  #not really needed since we use port3000
   type              = "ingress"
   cidr_blocks  = var.windows_ip  #concat(var.windows_ip, var.ssh_allowed_ips)
   from_port   = 80
@@ -126,7 +128,7 @@ resource "aws_security_group_rule" "http_linux" {
 
 resource "aws_security_group_rule" "port3000_linux" {
   type              = "ingress"
-  cidr_blocks  = concat(var.windows_ip, var.ssh_allowed_ips) 
+  cidr_blocks  =  var.windows_ip   #concat(var.windows_ip, var.ssh_allowed_ips) 
   from_port   = 3000
   to_port     = 3000
   protocol    = "tcp"

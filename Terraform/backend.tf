@@ -30,7 +30,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encryption" {
   }
 }
 
-#dynamic lock with DynamoDB
+#dynamic lock with DynamoDB  [prevents multiple processes from accessing record or performing an operation on it at the same time]
 resource "aws_dynamodb_table" "state_lock" {
     name = "state-lock"
     billing_mode = "PAY_PER_REQUEST" 
