@@ -36,6 +36,12 @@ data "aws_vpc" "default" {
   default = true
 }
 
+#IAM role for transfer of the AppCode(via S3) to the EC2
+resource "aws_iam_instance_profile" "code_deply_role" {
+  name = "LinuxInstanceProfile"
+  role = "EC2_DeployCodeService"  # Name of your existing IAM role
+}
+
 
 resource "aws_instance" "Windows_Gateway" {
   ami = "ami-0d188df7cedce7d90"
@@ -55,6 +61,8 @@ resource "aws_instance" "Linux_Host" {
   subnet_id  = "subnet-0523303f286361516"
   key_name = "access_key" 
   vpc_security_group_ids = [aws_security_group.linux_sec.id]
+
+  iam_instance_profile = aws_iam_instance_profile.code_deply_role.name
 
   //user_data = file("init_linux.sh")
 
