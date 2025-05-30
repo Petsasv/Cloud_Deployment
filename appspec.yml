@@ -4,3 +4,8 @@ files:
   - source: Website/
     destination: /home/ec2-user/Cloud_Deployment/Website/
     overwrite: true
+hooks:
+   BeforeInstall:
+    - location: scripts/clean_destination.sh
+      timeout: 300
+      runas: ec2-user
