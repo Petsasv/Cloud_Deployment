@@ -3,7 +3,8 @@ variable "ssh_allowed_ips" {
   default = [
     "62.74.39.191/32",
     "45.139.214.56/32",
-    "141.237.236.10/32"
+    "141.237.236.10/32",
+    "79.166.156.20/32"
   ]
   description = "List of IPs allowed to SSH into EC2"
 }
