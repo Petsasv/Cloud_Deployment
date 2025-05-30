@@ -1,0 +1,5 @@
+version: 0.0
+os: linux
+files:
+  - source: Website/
+    destination: /home/ec2-user/Cloud_Deployment/Website/
